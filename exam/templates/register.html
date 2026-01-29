@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> Scholarship Registration</title>
+
+    {% load static %}
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        body {
+            min-height: 100vh;
+            background: #eef2f7;
+            font-family: "Inter", "Segoe UI", sans-serif;
+        }
+
+        .left-panel {
+            background: linear-gradient(160deg, #fd350d, #008f02);
+            color: #fff;
+        }
+
+        .logo-wrapper {
+            background: rgba(255,255,255,0.18);
+            backdrop-filter: blur(8px);
+            padding: 35px;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+        }
+
+        .logo-wrapper img {
+            max-width: 160px;
+        }
+
+        .right-card {
+            border-radius: 26px;
+            box-shadow: 0 25px 55px rgba(0,0,0,0.15);
+            background: #fff;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 12px;
+            padding: 13px 16px;
+            font-size: 0.95rem;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            box-shadow: 0 0 0 0.15rem rgba(13,110,253,.25);
+        }
+
+        .btn {
+            border-radius: 12px;
+            padding: 12px;
+            font-weight: 600;
+        }
+
+        .heading {
+            font-weight: 800;
+            color: #1e293b;
+        }
+
+        .sub-text {
+            font-size: 0.95rem;
+            color: #64748b;
+        }
+
+        .top-actions a {
+            padding: 6px 14px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container-fluid">
+    <div class="row min-vh-100">
+
+        <!-- LEFT -->
+        <div class="col-md-5 d-none d-md-flex left-panel align-items-center justify-content-center">
+            <div class="text-center px-4">
+                <div class="logo-wrapper mb-4">
+                    <img src="{% static 'images/examlogo.png' %}" alt="Exam Logo">
+                </div>
+
+                <h2 class="fw-bold"></h2>
+                <p class="fs-5 mb-3"> Exam Registration Portal</p>
+            </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="col-md-7 d-flex align-items-center justify-content-center py-4">
+            <div class="col-lg-8 col-xl-7">
+                <div class="card right-card border-0">
+                    <div class="card-body p-4 p-lg-5">
+
+                        <!-- ACTION BUTTONS -->
+                        <div class="d-flex justify-content-between mb-4 top-actions">
+                            <a href="{% url 'otp_login' %}" class="btn btn-success btn-sm">📝 Go to Exam</a>
+                            <a href="{% url 'admin:index' %}" class="btn btn-outline-secondary btn-sm">Admin Login</a>
+                        </div>
+
+                        <h3 class="text-center heading mb-2">
+                             Exam Registration
+                        </h3>
+                        <p class="text-center sub-text mb-4">
+                            Fill in your details carefully to complete registration
+                        </p>
+
+                        <form method="post" action="{% url 'register' %}">
+                            {% csrf_token %}
+
+                            <!-- NAME -->
+                            <input class="form-control mb-3"
+                                   name="name"
+                                   placeholder="Full Name" required>
+
+                            <!-- EMAIL -->
+                            <input class="form-control mb-1"
+                                   type="email"
+                                   name="email"
+                                   id="email"
+                                   placeholder="Email Address" required>
+                            <small id="emailError" class="text-danger"></small>
+
+                            <!-- PHONE -->
+                            <input class="form-control mb-1 mt-3"
+                                   name="phone"
+                                   id="phone"
+                                   placeholder="Phone Number" required>
+                            <small id="phoneError" class="text-danger"></small>
+
+                            <!-- COLLEGE -->
+                            <select class="form-select mt-3" name="college" required>
+                                <option value="">Select College</option>
+                                {% for c in colleges %}
+                                    <option value="{{ c.id }}">{{ c.name }}</option>
+                                {% endfor %}
+                            </select>
+
+                            <!-- QUALIFICATION -->
+                            <select class="form-select mt-3" name="qualification" required>
+                                <option value="">Select Qualification</option>
+                                <option>SSLC</option>
+                                <option>Plus Two</option>
+                                <option>Diploma</option>
+                                <option>Degree</option>
+                                <option>BTech</option>
+                                <option>MCA</option>
+                            </select>
+
+                            <!-- BRANCH -->
+                            <select class="form-select mt-3" name="branch" required>
+                                <option value="">Select Branch</option>
+                                {% for b in branches %}
+                                    <option value="{{ b.id }}">{{ b.name }}</option>
+                                {% endfor %}
+                            </select>
+
+                            <!-- YEAR -->
+                            <label class="form-label fw-semibold mt-3">Year of Passing</label>
+                            <select class="form-select mb-3" name="year_of_passing" required>
+                                <option value="">Select Year</option>
+                                {% for y in years %}
+                                    <option value="{{ y.year }}">{{ y.year }}</option>
+                                {% endfor %}
+                            </select>
+
+                            <!-- EXAM DATE -->
+                            <label class="form-label fw-semibold">Exam Date</label>
+                            <input type="date"
+                                   class="form-control mb-4"
+                                   name="exam_date"
+                                   id="exam_date" required>
+
+                            <div class="d-grid gap-3">
+                                <button type="submit" class="btn btn-primary">
+                                    Register Now
+                                </button>
+
+                                <a href="{% url 'otp_login' %}"
+                                   class="btn btn-outline-success">
+                                    Already Registered? Go to Exam
+                                </a>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- ✅ REAL-TIME EMAIL + PHONE CHECK (ONLY ADDITION) -->
+<script>
+const emailInput = document.getElementById("email");
+const phoneInput = document.getElementById("phone");
+
+const emailError = document.getElementById("emailError");
+const phoneError = document.getElementById("phoneError");
+
+function checkUser() {
+    const email = emailInput.value;
+
+    let phone = phoneInput.value;
+    phone = phone.replace("+91", "").replace(/\s/g, "");
+
+    fetch(`/check-user/?email=${email}&phone=${phone}`)
+        .then(res => res.json())
+        .then(data => {
+
+            if (data.email_exists) {
+                emailError.innerText = "❌ Email ID already exists";
+                emailInput.classList.add("is-invalid");
+            } else {
+                emailError.innerText = "";
+                emailInput.classList.remove("is-invalid");
+            }
+
+            if (data.phone_exists) {
+                phoneError.innerText = "❌ Phone number already exists";
+                phoneInput.classList.add("is-invalid");
+            } else {
+                phoneError.innerText = "";
+                phoneInput.classList.remove("is-invalid");
+            }
+        });
+}
+
+emailInput.addEventListener("input", checkUser);
+phoneInput.addEventListener("input", checkUser);
+</script>
+
+<!-- BACKEND ERROR POPUP -->
+{% if messages %}
+<script>
+{% for message in messages %}
+Swal.fire({
+    icon: "error",
+    title: "Registration Error",
+    text: "{{ message }}",
+    confirmButtonColor: "#0d6efd"
+});
+{% endfor %}
+</script>
+{% endif %}
+
+</body>
+</html>

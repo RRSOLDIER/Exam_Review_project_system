@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OTP Login</title>
+
+    <!-- Bootstrap (optional but neat) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+
+            <div class="card shadow">
+                <div class="card-body">
+
+                    <h4 class="text-center mb-3">OTP Login</h4>
+
+                    {% if messages %}
+                      {% for m in messages %}
+                        <p class="text-danger text-center">{{ m }}</p>
+                      {% endfor %}
+                    {% endif %}
+
+                    <form method="post" action="{% url 'otp_login' %}">
+                        {% csrf_token %}
+
+                        <input type="text"
+                               name="name"
+                               class="form-control mb-3"
+                               placeholder="Full Name"
+                               required>
+
+                        <input type="text"
+                               name="phone"
+                               class="form-control mb-3"
+                               placeholder="Phone Number"
+                               required>
+
+                        <button type="submit"
+                                class="btn btn-primary w-100 mb-2">
+                            Get OTP
+                        </button>
+                    </form>
+
+                    <!-- ✅ BACK BUTTON -->
+                    <a href="{% url 'register' %}"
+                       class="btn btn-outline-secondary w-100">
+                        ⬅ Back to Registration
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

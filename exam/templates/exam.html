@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scholarship Exam</title>
+    <style>
+        .question-box {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Scholarship Exam</h2>
+
+<form method="post" action="{% url 'submit_exam' %}">
+    {% csrf_token %}
+
+    {% for q in questions %}
+        <div class="question-box">
+            <p><strong>{{ forloop.counter }}. {{ q.question }}</strong></p>
+
+            <label>
+                <input type="radio"
+                       name="q{{ q.id }}"
+                       value="option1"
+                       {% if answers.q.id == "option1" %}checked{% endif %}
+                       onclick="saveAnswer({{ q.id }}, 'option1')">
+                A) {{ q.option1 }}
+            </label><br>
+
+            <label>
+                <input type="radio"
+                       name="q{{ q.id }}"
+                       value="option2"
+                       onclick="saveAnswer({{ q.id }}, 'option2')">
+                B) {{ q.option2 }}
+            </label><br>
+
+            <label>
+                <input type="radio"
+                       name="q{{ q.id }}"
+                       value="option3"
+                       onclick="saveAnswer({{ q.id }}, 'option3')">
+                C) {{ q.option3 }}
+            </label><br>
+
+            <label>
+                <input type="radio"
+                       name="q{{ q.id }}"
+                       value="option4"
+                       onclick="saveAnswer({{ q.id }}, 'option4')">
+                D) {{ q.option4 }}
+            </label>
+        </div>
+    {% endfor %}
+
+    <button type="submit">Submit Exam</button>
+</form>
+
+<script>
+function saveAnswer(questionId, answer) {
+    fetch("{% url 'save_answer' %}", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}",
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            question_id: questionId,
+            answer: answer
+        })
+    });
+}
+</script>
+
+</body>
+</html>
+
